@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div contenteditable="true">
+      Ce texte peut être édité par l'utilisateur.
+    </div>
+  </body>
+</html>

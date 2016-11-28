@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- saved from url=(0080)http://so.devilmaycode.it/jquery-setting-cursor-position-in-contenteditable-div/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
+
+  <title>jquery Setting cursor position in contenteditable div</title>
+  <meta name="author" content="Luca Filosofi">
+  <meta name="keywords" content="jquery javascript cursor caret editable content contenteditable">   
+  <meta name="copyright" content="devilmaycode studio (r) Luca Filosofi">
+  <meta name="description" content="jquery Setting cursor position in contenteditable div">   
+  <meta name="robots" content="index,follow">  
+  <style>
+      body {
+        text-align:center;
+    }
+    #editable {
+    	padding:5px;
+    	outline: 1px solid #CCC;
+    	border: 1px solid #000;
+        text-align:left;
+        margin:50px auto;
+        width:960px;
+        height:300px;
+    }
+</style>
+<script type="text/javascript" src="./o_files/jquery.min.js"></script>
+<script type="text/javascript" src="./o_files/rangy-core.js"></script>
+</head>
+<body>
+<script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- so devilmaycode -->
+<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-2559638910820917" data-ad-slot="3131707536"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>    <h1><a href="http://stackoverflow.com/questions/2871081/jquery-setting-cursor-position-in-contenteditable-div">jquery Setting cursor position in contenteditable div</a></h1>
+    <div id="editable" contenteditable="true" class="">
+        <h2>Lorem</h2> <p>ipsum dolor <i>sit</i> amet, consectetur <strong>adipiscing</strong> elit.</p> Aenean. &nbsp; &nbsp;</div>
+    <script type="text/javascript">
+        $(function() {
+            $('[contentEditable="true"]').on('click', function(e) {
+                if(!$(this).hasClass('editing')){
+                    var range = rangy.createRange();
+                    $(this).toggleClass('editing');
+                    $(this).html('<span class="content-editable-wrapper">'+$(this).html()+'</span>');
+                    var $last = $(this).find('.content-editable-wrapper');
+                    if($last.length){
+                        range.setStartAfter($last[0]);
+                    }
+                    range.collapse(false);
+                    rangy.getSelection().setSingleRange(range);
+                }
+            }).on('blur', function(){
+                $(this).toggleClass('editing');
+                $(this).find('.content-editable-wrapper').children().last().unwrap();
+            });
+        });
+    </script>
+ 
+
+</body></html>

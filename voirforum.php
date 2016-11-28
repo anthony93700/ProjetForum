@@ -1,0 +1,452 @@
+<?php
+session_start();
+require('connexion.php');
+if(isset($_SESSION['connect'])){
+if($_SESSION['connect']){
+echo '
+<!DOCTYPE html>
+
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+         
+        <meta charset="utf-8">
+        <title>Forum</title>
+        <
+        <link href="./indes_files/bootstrap.min.css" rel="stylesheet">
+        
+        <!--[if lt IE 9]>
+          <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+       
+
+
+
+
+
+
+       
+        
+        <style type="text/css">
+.btn-xs {
+    width: 80px;
+    margin-bottom: 3px;
+    height: 25px;
+}
+.center{
+min-height:800px;
+min-width:700px;
+  padding-right: 100px;
+  padding-left: 100px;
+  margin-right: auto;
+  margin-left: auto;
+  background-color:#F2F2F2;
+padding-bottom:50px;
+padding-top:60px;
+}
+  .pagination{
+    min-width:300px;
+    }
+.form-control{
+
+  }
+   #text{
+    width:200px;
+     height:20px;
+    }
+  #makesujet{
+
+ min-width:400px;
+    max-width:600px;
+  }
+    .envoyer{
+      width:200px;
+        background-color:black;
+      }
+  .titre{
+    text-align:center;
+    }
+    .pag{
+      margin-right:auto;
+       margin-left:auto;
+       width:100%;
+      }
+ .colonne{
+    
+  background-color:#58ACFA;
+    color:#FFF;
+    }
+  .table{
+  border: 3px solid #58ACFA;
+max-width:900px;
+  }
+  .nom{
+    min-width:300px;
+  margin-left:-15px;
+    
+    }
+
+    .topic{
+    min-width:40px;
+    max-width:40px;
+  	min-height:20px;
+  max-height:20px;
+  text-align:center;
+    }
+.colonneIm{
+    background-color:#FFF;
+  }
+ .colonneP{
+    background-color:#FAFAFA;
+    }
+    .navigation{
+color:red;
+}
+        </style>
+    </head>
+
+    <!-- HTML code from Bootply.com editor -->
+    
+    <body>
+        <div class="center">
+        
+         ';
+
+if(isset($_GET['id'])){
+	$req = $db->prepare('select forum_name from forum_forum where forum_id = :id ');
+	$req->bindValue(':id',htmlspecialchars($_GET['id']));
+	$req->execute();
+	$nom = $req->fetch(PDO::FETCH_NUM);
+	echo'<div class="navbar navbar-inverse navbar-fixed-top headroom" >
+		<div class="container">
+			<div id = "fonte" class="navbar-header">
+				<!-- Button for smallest screens -->
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+				<p><a class="navbar-brand" href="index.php"><img src="./plume.png" style="width:30px;" alt="Progressus HTML5 template"></a></p>
+			</div>
+			
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav pull-right">
+					<li class="active"><a href="index.php">Accueil</a></li>
+					
+			<li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Matières <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+			  <li role="separator" class="divider"></li>
+                <li class="dropdown-header">UE1</li>
+                <li><a href="bdd.php">Base de donnée</a></li>
+                <li><a href="#">Introduction aux systèmes informatique</a></li>
+                <li><a href="#">Réseaux</a></li>
+				<li><a href="#">JAVA</a></li>
+				<li><a href="#">UML</a></li>
+				<li><a href="#">Interfaces Homme Machine</a></li>				
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">UE2</li>
+                <li><a href="#">Algébre linéaire</a></li>
+                <li><a href="graph.php">Graphes et langages</a></li>
+              </ul>
+            </li>
+					<li><a href="signin.php">Forum</a></li>
+					<li><a href="contact.php">Contact</a></li>
+					
+					<li><a class="btn" href="deco.php">Déconnexion du forum</a> </li>
+					
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</div> 
+      
+    <div class="container">
+<p  > <strong> <a href="index.php" class="navigation">accueil</a></strong> <img src="./smiley/fleche.gif"/> '.$nom[0].'</p>';
+
+	$req = $db->prepare('select topic_titre,topic_id,topic_post,topic_createur,bloquer from forum_topic where forum_id = :id order by topic_id desc');
+	$req->bindValue(':id',htmlspecialchars($_GET['id']));
+	$req->execute();
+	$i=0;
+	$nom = $req->fetch(PDO::FETCH_NUM);
+	$req2 = $db->prepare('select count(*) from forum_topic where forum_id= :id ');
+	$req2->bindValue(':id',htmlspecialchars($_GET['id']));
+		$req2->execute();
+		$nb = $req2->fetch(PDO::FETCH_NUM);
+
+	
+	if($_GET['nb']<$nb[0]){
+	for($i2=0;$i2<$_GET['nb'];$i2++){
+		
+$nom = $req->fetch(PDO::FETCH_NUM);
+}}
+	if($nom!=false){
+		echo '
+ <table class="table ">
+            <tbody>
+                <tr class="colonne">
+                    <td class="col-xs-8 col-sm-8 col-lg-8">
+                      <div class="nom" style="margin-left:0px;">nom des topic</div>
+                    </td>
+                    <td class="col-xs-1 col-sm-1 col-lg-1">
+                        <div class="topic">réponse</div>
+                    </td>
+                    <td class="col-xs-3 col-sm-3 col-lg-3">
+                        <div class="answer">dernier message</div>
+                    </td>
+                </tr>';
+	do{
+		$i++;
+		$req2 = $db->prepare('select * from forum_membres where membre_id = :i');
+	$req2->bindValue(':i',$nom[3]);
+	$req2->execute();
+	$men = $req2->fetch(PDO::FETCH_NUM);
+		if($_SESSION['role']==1){
+		$form='   <a href="supprimert.php?id='.$_GET['id'].'&tid='.$nom[1].'&nb='.$_GET['nb'].' " ><button class="btn btn-info btn-xs">supprimer</button></a>';
+			if($nom[4]==0){
+			$poi='<a href="bloquer.php?id='.$_GET['id'].'&m='.$nom[1].'" ><button class="btn btn-info btn-xs">bloquer  </button></a>';
+			}else if($nom[4]==1){
+			$poi='<a href="bloquer.php?id='.$_GET['id'].'&p='.$nom[1].'" ><button class="btn btn-info btn-xs">debloquer  </button></a>';
+			}
+			else
+			$poi='';
+		$form =$form.$poi;
+		}
+		else if($men[1]==$_SESSION['pseudo'])
+		$form='<a href="supprimert.php?id='.$_GET['id'].'&tid='.$nom[1].'&nb='.$_GET['nb'].' " ><button class="btn btn-info btn-xs">supprimer</button></a>';
+		else
+		$form='';
+		
+		$req10 = $db->prepare('SELECT post_createur,post_texte,topic_id,post_forum_id,nb FROM forum_post WHERE topic_id = :tid and post_forum_id = :fid group by post_id desc');
+	$req10->bindValue(':fid',htmlspecialchars($_GET['id']));
+	$req10->bindValue(':tid',htmlspecialchars($nom[1]));
+	$req10->execute();
+	$idm = $req10->fetch(PDO::FETCH_NUM);
+
+$req10 = $db->prepare('select membre_pseudo,role from forum_membres where membre_id = :id ');
+	$req10->bindValue(':id',htmlspecialchars($idm[0]));
+	$req10->execute();
+	
+$dr = $req10->fetch(PDO::FETCH_NUM);
+$req10 = $db->prepare('select membre_pseudo,role from forum_membres where membre_id = :id ');
+	$req10->bindValue(':id',htmlspecialchars($nom[3]));
+	$req10->execute();
+	
+$dr2 = $req10->fetch(PDO::FETCH_NUM);
+if($dr[1]==1){
+		$yit='font-weight: bold;
+    text-decoration: none;
+    color: #96d149;';
+		
+		}else{
+		$yit='color:red';
+		}
+if($dr2[1]==1){
+		$yi='font-weight: bold;
+    text-decoration: none;
+    color: #96d149;';
+		
+		}else{
+		$yi='';
+		}
+	if($i%2==0){
+		echo'  <tr class="colonneIm">
+                    <td class="col-xs-6 col-sm-6 col-lg-6">
+                        <div class="col-sm-10"><a class="nom"  href="voirtopic.php?t='.$nom[1].'&f='.$_GET['id'].'&nb=0&nbp='.$_GET['nb'].'"> <strong style="'.$yi.'">'.substr($nom[0],0,50).'</strong></a>
+                        </div>
+                        <div class="col-xs-2 col-sm-2col-lg-6">
+                            '.$form.'
+                        </div>
+                    </td>
+                    <td class="col-xs-1 col-sm-1 col-lg-1">
+                        <div class="topic">'.$nom[2].'</div>
+                    </td>
+                    <td class="col-xs-3 col-sm-3 col-lg-3">
+                       <div class="answer" style="word-wrap:break-word;" > <a href="voirtopic.php?t='.$idm[2].'&f='.$idm[3].'&nb='.$idm[4].'"><strong>'.substr($idm[1],0,10).' ...</strong></a><br> by <strong style="'.$yit.'">'.$dr[0].'</strong></div></a>
+                    </td>
+                </tr>';
+	}
+	else{
+echo'  <tr class="colonneP">
+                    <td class="col-xs-8 col-sm-8 col-lg-8">
+                        <div class="col-sm-10"><a class="nom"  href="voirtopic.php?t='.$nom[1].'&f='.$_GET['id'].'&nb=0&nbp='.$_GET['nb'].'"> <strong style="'.$yi.'">'.substr($nom[0],0,50).'</strong></a>
+                        </div>
+                        <div class="col-xs-2 col-sm-2col-lg-6">
+                            '.$form.'
+                        </div>
+                    </td>
+                    <td class="col-xs-1 col-sm-1 col-lg-1">
+                        <div class="topic">'.$nom[2].'</div>
+                    </td>
+                    <td class="col-xs-3 col-sm-3 col-lg-3">
+                        <div class="answer" style="word-wrap:break-word;" ><a href="voirtopic.php?t='.$idm[2].'&f='.$idm[3].'&nb='.$idm[4].'"><strong>'.substr($idm[1],0,10).' ...</strong></a> <br> by <strong style="'.$yit.'">'.$dr[0].'</strong></div>
+                    </td>
+                </tr>';
+}
+		/*echo '<tr><td class="nom"><div class="msgt">'.$form.'<a href="voirtopic.php?t='.$nom[1].'&f='.$_GET['id'].'&nb=0&nbp='.$_GET['nb'].'">'.$nom[0].'</a></div></td><td>'.$nom[2].'</td>';
+		echo'<td class="lastA"><b>dernière réponse :</b></br>'.$idm[1].'</td></tr>';*/
+	}while(($nom = $req->fetch(PDO::FETCH_NUM))&&$i%5!=0);
+	}else{
+		echo'<tr><td class="rien">aucun topic retourner à <a href="index.php">l\'accueil</a> ou ecrivez un nouveaux topic. </td></tr>';
+	}
+	echo '</table>';
+echo ' <div class="col-xs-4 col-sm-4 col-lg-4"></div><div class="col-xs-5 col-sm-5 col-lg-5"><ul class="pagination">';
+if($_GET['nb']<20){
+		if($nb[0]<20)
+	$iu = $nb[0]/5;
+	else
+	$iu = 5;
+	for($i=0;$i<$iu;$i++){
+	if(($i*5)==$_GET['nb']){
+	$yt=' active';
+	}else
+	$yt='';
+	       echo ' <li class="page-link'.$yt.'"><a  href="voirforum.php?id='.$_GET['id'].'&nb='.($i*5).'">'.($i+1).'</a></li>';
+		/*echo '<a href="voirforum.php?id='$_GET['id']'&nb='.($i*5).'">'.($i+1).'</a>   ';*/
+	}
+	
+	if($nb[0]>25&&$nb[0]%5!=0)
+	echo '<li class="page-link "><a  href="voirforum.php?id='.$_GET['id'].'&nb='.($nb[0]-($nb[0]%5)).'">'.(int)($nb[0]/5+1).'</a></li>';
+}else if($_GET['nb']==($nb[0]-($nb[0])%5)||($_GET['nb']+5)==$nb[0]){
+	echo '<li class="page_link "><a  href="voirforum.php?id='.$_GET['id'].'&nb=0">1</a></li>';
+	for($i=-2;$i<=0;$i++){
+		if(($_GET['nb']+($i*5))==$_GET['nb']){
+	$yt=' active';
+	}else
+	$yt='';
+	       echo ' <li class="page_link '.$yt.'"><a  href="voirforum.php?id='.$_GET['id'].'&nb='.($_GET['nb']+($i*5)).'">'.($_GET['nb']/5+$i+1).'</a></li>';
+		/*echo '<a href="voirforum.php?id='$_GET['id']'&nb='.($i*5).'">'.($i+1).'</a>   ';*/
+	}
+
+}else{
+	echo '<li class="page_link"><a  href="voirforum.php?id='.$_GET['id'].'&nb=0">1</a></li>';
+	for($i=-2;$i<=0;$i++){
+	if(($_GET['nb']+($i*5))==$_GET['nb']){
+	$yt=' active';
+	}else
+	$yt='';
+		
+	       echo ' <li class="page_link '.$yt.'"><a  href="voirforum.php?id='.$_GET['id'].'&nb='.($_GET['nb']+($i*5)).'">'.($_GET['nb']/5+$i+1).'</a></li>';
+
+		/*echo '<a href="voirforum.php?id='$_GET['id']'&nb='.($i*5).'">'.($i+1).'</a>   ';*/
+}
+if(($_GET['nb']+($i*5))==$_GET['nb']){
+	$yt=' active';
+	}else
+	$yt='';
+if(($nb[0])!=($nb[0]-($nb[0]%5))&&$nb[0]%5!=0&&($nb[0]-($nb[0]%5))!=$_GET['nb']+5)
+echo '<li class="page_link '.$yt.'"><a  href="voirforum.php?id='.$_GET['id'].'&nb='.($nb[0]-($nb[0]%5)).'">'.(int)($nb[0]/5+1 ).'</a></li>';
+else if(($nb[0])!=($nb[0]-($nb[0]%5))&&($nb[0]-($nb[0]%5))!=$_GET['nb']+10)
+echo '<li class="page_link '.$yt.'"><a  href="voirforum.php?id='.$_GET['id'].'&nb='.($nb[0]-($nb[0]%5)).'">'.(int)($nb[0]/5+1 ).'</a></li>';
+} 
+echo '</ul></div></div>';
+	if(isset($_POST['msg'])&&isset($_POST['titre'])){
+
+		
+$req = $db->prepare('select membre_id from forum_membres where membre_pseudo = :pseudo');
+		
+		$req->bindValue(':pseudo',htmlspecialchars($_SESSION['pseudo']));
+		$req->execute();
+		$id= $req->fetch(PDO::FETCH_NUM);
+		
+		$req = $db->prepare('insert into forum_topic ( forum_id , topic_titre , topic_createur, topic_post, bloquer ) values ( :id, :msg, :tid, 0,0)');
+		$req->bindvalue(':id',htmlspecialchars($_GET['id']));
+		$req->bindvalue(':msg',htmlspecialchars($_POST['titre']));
+		$req->bindvalue(':tid',htmlspecialchars($id[0]));
+		$req->execute();
+		$req = $db->prepare('select max(topic_id) from forum_topic where forum_id = :fid');
+		$req->bindvalue(':fid',htmlspecialchars($_GET['id']));
+		$req->execute();
+		$r = $req->fetch(PDO::FETCH_NUM);
+		$req = $db->prepare('select membre_id from forum_membres where membre_pseudo = :id');
+		$req->bindvalue(':id',htmlspecialchars($_SESSION['pseudo']));
+		$req->execute();
+		$r2 = $req->fetch(PDO::FETCH_NUM);
+		$req = $db->prepare('insert into forum_post ( post_createur , post_texte , topic_id, post_forum_id ) values ( :id, :msg, :tid, :fid )');
+		$req->bindvalue(':id',htmlspecialchars($r2[0]));
+		$req->bindvalue(':msg',htmlspecialchars($_POST['msg']));
+		$req->bindvalue(':tid',htmlspecialchars($r[0]));
+		$req->bindvalue(':fid',htmlspecialchars($_GET['id']));
+		$req->execute();
+		$req = $db->prepare('select forum_topic from forum_forum where forum_id = :id');
+		$req->bindValue(':id',htmlspecialchars($_GET['id']));
+		$req->execute();
+		$i = $req->fetch(PDO::FETCH_NUM);
+		$req = $db->prepare('update forum_forum set forum_topic = :p where forum_id = :id');
+		$req->bindvalue(':p',htmlspecialchars($i[0]+1));
+		$req->bindvalue(':id',htmlspecialchars($_GET['id']));
+		$req->execute();
+		
+		
+
+		echo '<meta http-equiv="Refresh" content="0; URL=voirforum.php?id='.$_GET['id'].'&nb='.$_GET['nb'].'" />';
+
+		}else{
+
+		echo '<div class="container"><form class="col-lg-6" id="makesujet" action="voirforum.php?id='.$_GET['id'].'&nb='.$_GET['nb'].'" method="post">
+  <legend><strong>créer un sujet</strong></legend>
+    <label for="texte">titre</label>
+        <input name="titre" id="titre" type="text" class="form-control">
+    
+    <label for="textarea">votre message </label>
+    <textarea name="msg" id="msg"  type="textarea" rows="5" class=" form-control"></textarea>
+   
+        <input type="submit" style="width:100px; background-color:#58ACFA; color:#FFF" value="poster" class="form-control"></input>
+</form></div></div>';
+
+/*'<div class="cm">
+		<h2>ecriver un nouveaux topic</h2>
+		<form class="t" method="post" action="voirforum.php?id='.$_GET['id'].'&nb='.$_GET['nb'].'">
+		<label for="titre"><b>titre</b></label></br>
+		<input name="titre" id="titre" ></input></br> <label for=""><b>message</b></label></br>
+		<textarea name="msg" id="msg" cols="110" rows="10" ></textarea></br>
+		<input type="submit" value="poster" class="submit"></input>
+		</form>
+		</div>';*/
+		}
+require_once("footer.html");
+}else{
+	echo'erreur retourner à <a href="index.php">l\'accueil</a>';
+}
+echo '
+ <script async="" src="./indes_files/analytics.js"></script><script type="text/javascript" src="./indes_files/jquery.min.js"></script>
+
+
+        <script type="text/javascript" src="./indes_files/bootstrap.min.js"></script>
+
+
+
+<script>         
+
+var p = document.getElementsByClassName("nom");
+var u2 = document.getElementsByClassName("answer");
+smiley(p);
+smiley(u2);
+function smiley(u){
+for(var i = 0;i<u.length;i++){
+if (/:\)/.test(u[i].textContent)) {
+u[i].innerHTML = u[i].innerHTML.replace(/:\)/g,\'<img src="smiley/smile.png" alt="sourire"/>\'); 
+} 
+if (/:\*/.test(u[i].innerHTML)) {
+u[i].innerHTML = u[i].innerHTML.replace(/:\*/g,\'<img src="smiley/kiss.png" alt="sourire"/> \');
+
+}  
+
+ if (/:o/.test(u[i].textContent)) {
+u[i].innerHTML = u[i].innerHTML.replace(/:o/g,\'<img src="smiley/surpris.png" alt="sourire"/>\');
+} 
+if (/:\(/.test(u[i].textContent)) {
+u[i].innerHTML = u[i].innerHTML.replace(/:\(/g,\'<img src="smiley/triste.png" alt="sourire"/>\');
+} 
+ if (/;\)/.test(u[i].textContent)) {
+u[i].innerHTML = u[i].innerHTML.replace(/;\)/g,\'<img src="smiley/wike.png" alt="sourire"/>\');
+}
+}
+}
+</script>
+
+
+        
+ 
+    
+</body></html>';}
+else{
+echo '<meta http-equiv="Refresh" content="0; URL=signin.php" />';
+}}else{
+if(isset($_SESSION['connect']))
+$_SESSION['connect']=false;
+echo '<meta http-equiv="Refresh" content="0; URL=signin.php" />';
+}?>

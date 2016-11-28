@@ -1,0 +1,42 @@
+body{
+background-image:url("backg.jpg");
+background-size:cover;
+background-attachment:fixed;
+background-repeat:no-repeat;
+}
+
+.principal{
+margin-top:25%;
+max-height:110px;
+display:block;
+}
+.txt{
+font-family:"Andale Mono", monospace;
+max-width:200px;
+float:left;
+}
+.formu{
+margin-left:300px;
+max-width:310px;
+text-align:center;
+float:left;
+}
+#pass{
+width:300px;
+height:30px;
+margin-top:5px;
+margin-bottom:5px;
+padding:0px 0px 0px 0px;
+}
+#username{
+width:300px;
+height:30px;
+padding:0px 0px 0px 0px;
+}
+.submit{
+text-align:center;
+height:30px;
+}
+
+.rm{
+}
